@@ -45,6 +45,8 @@
       allowFuture: false,
       localeTitle: false,
       cutoff: 0,
+      cutoffLocales: null, // For cutoffLocales and cutoffOptions see
+      cutoffOptions: {},   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString
       autoDispose: true,
       strings: {
         prefixAgo: null,
@@ -192,6 +194,9 @@
     if (!isNaN(data.datetime)) {
       if ( $s.cutoff == 0 || Math.abs(distance(data.datetime)) < $s.cutoff) {
         $(this).text(inWords(data.datetime));
+      } else if ($s.cutoffLocales && typeof Date.prototype.toLocaleString == 'function') {
+        var $date = new Date(data.datetime);
+        $(this).text($date.toLocaleString($s.cutoffLocales, $s.cutoffOptions));
       }
     }
     return this;
